@@ -1,0 +1,208 @@
+﻿
+@{
+    ViewData["Title"] = "Create";
+}
+@model GlobalEntity.User;
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css">
+<script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
+
+<div class="card">
+    <div class="card-title">
+        <h2>Create/Edit User</h2>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group d-none">
+                    <label>Id</label>
+                    <input id="txtid" value="@Model.Id" class="form-control" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    <label>FirstName</label>
+                        <input required id="txtfname" value="@Model.FirstName" class="form-control" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    <label>LastName</label>
+                        <input required id="txtlname" value="@Model.LastName" class="form-control" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    <label>Email</label>
+                        <input required type="email" id="txtemail" value="@Model.Email" class="form-control" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    <label>Mobile</label>
+                    <input  required type="number" id="txtmobile" value="@Model.Mobile" class="form-control" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    <label>DOB</label>
+                        <input required type="date" id="txtcdate" value="@Model.DOB" class="form-control" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <label>Gender</label>
+            <div class="form-group">
+                <select class="form-select w-50" id="gender" value="@Model.Gender" aria-label="Floating label select example">
+                <option selected>select Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
+            </div>
+        </div>
+        <div class="row w-50">
+            <label>Skills</label>
+            <select id="choices-multiple-remove-button" value="@Model.Skills" placeholder="Select Skills" multiple class="w-50">
+          
+                <option value="php">Php</option>
+                <option value="kotlin">Kotlin</option>
+                <option value="java">Java</option>
+                <option value="c#">C#</option>
+            </select>
+        </div>
+        <div class="row mt-2 ms-2">
+            
+            <div class="form-check form-switch">
+                <input class="form-check-input" value="@Model.Subscribe" type="checkbox" role="switch" id="subscribe">
+                <label class="form-check-label" for="flexSwitchCheckDefault">Subscribe</label>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    <button onclick="handlesave()" type="submit" class="btn btn-success">Save</button> <a onclick="backtolist()" class="btn btn-danger">Cancel</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        var multipleCancelButton = new Choices('#choices-multiple-remove-button', {
+            removeItemButton: true,
+        });
+      
+    });
+   
+    function backtolist()
+    {
+        window.location.href = "/User";
+    }
+
+    function handlesave(e) {
+        var id = $('#txtid').val();
+        var fname = $('#txtfname').val();
+        var lname = $('#txtlname').val();
+        var email = $('#txtemail').val();
+        var mobile = $('#txtmobile').val();
+        var dob = $('#txtcdate').val();
+        var gender = $('#gender').val();
+        var skills = $('#choices-multiple-remove-button').val().toString();
+        var subscribe = $('#subscribe').val();
+
+        var isproceed = true;
+
+        //validation
+         if (id != '' && id != null) {
+            $('#txtid').css('border-color', '#ccc');
+             isproceed = true;
+         }else
+        {
+            $('#txtid').css('border-color', 'red');
+             isproceed = false;
+        }
+
+        if (fname != '' && fname != null) {
+            $('#txtfname').css('border-color', '#ccc');
+            isproceed = true;
+        }else
+        {
+            $('#txtfname').css('border-color', 'red');
+             isproceed = false;
+        }
+
+        if (lname != '' && lname != null) {
+            $('#txtlname').css('border-color', '#ccc');
+            isproceed = true;
+        }else {
+            $('#txtlname').css('border-color', 'red');
+            var isproceed = false;
+        }
+        var pattern = /^([\w-\.]+@@([\w-]+\.)+[\w-]{2,4})?$/;
+        var emailFormat = pattern.test(email);
+
+        if (email != '' && email != null && emailFormat) {
+            $('#txtemail').css('border-color', '#ccc');
+            isproceed = true;
+        }else {
+            $('#txtemail').css('border-color', 'red');
+             isproceed = false;
+
+        }
+        if (mobile != '' && mobile != null && mobile.length === 10) {
+            $('#txtmobile').css('border-color', '#ccc');
+            isproceed = true;
+        }else {
+            $('#txtmobile').css('border-color', 'red');
+             isproceed = false;
+
+        }
+
+        if (isproceed) {
+            var _user = new Object();
+            _user.Id = id;
+            _user.FirstName = fname;
+            _user.LastName = lname;
+            _user.Email = email;
+            _user.Mobile = mobile;
+            _user.CreatedDate = new Date().toISOString().slice(0, 10)
+            _user.Gender = gender;
+            _user.Skills = skills;
+            _user.DOB = new Date(dob).toISOString().slice(0, 10);
+            _user.Subscribe = subscribe=='on'? true:false;
+            _user.Year = new Date().toISOString().slice(0, 10).split('-')[0];
+
+            $.ajax({
+                type: "post",
+                url: "/user/save",
+                data: _user,
+                success: function (data) {
+                    if (data == 'pass') {
+                        alert('saved successfuly');
+                        backtolist();
+                    } else {
+                        alert("failure due to:" + data)
+                    }
+                },
+                failure: function (err) {
+
+                }
+            });
+        }
+    }
+
+</script>
+

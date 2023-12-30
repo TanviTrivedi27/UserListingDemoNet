@@ -1,0 +1,189 @@
+﻿@model List<GlobalEntity.User>
+
+    <div class="card">
+        
+        <div class="card-body">
+        <a class="btn btn-success" asp-controller="User" asp-action="Create">Add New</a>
+            <div class="card-title">
+            <h2>
+              User Listing
+            </h2>
+            </div>
+        <table class="table table-bordered table-striped"" id='userlist'>
+                <thead class="bg-dark text-white">
+                    <tr>
+                        <td>Id</td>
+                        <td>FirstName</td>
+                        <td>LastName</td>
+                        <td>Email</td>
+                        <td>Mobile</td>
+                        <td>CreatedDate</td>
+                        <td>DOB</td>
+                        <td>Action</td>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach(var item in Model.Select((x, i) => new { Value = x, Index = i+1 }))
+                {
+                    <tr>
+                        <td>
+                    @Html.DisplayFor(itemdisplay=>item.Index)
+                    @Html.HiddenFor(itemdisplay=>item.Value.Id)
+                        </td>
+                        <td>
+                    @Html.DisplayFor(itemdisplay=>item.Value.FirstName)
+                        </td>
+                        <td>
+                    @Html.DisplayFor(itemdisplay=>item.Value.LastName)
+                        </td>
+                        <td>
+                    @Html.DisplayFor(itemdisplay=>item.Value.Email)
+                        </td>
+                        <td>
+                    @Html.DisplayFor(itemdisplay=>item.Value.Mobile)
+                        </td>
+                        <td>
+                    @Html.DisplayFor(itemdisplay=>item.Value.CreatedDate)
+                        </td>
+                        <td>
+                    @Html.DisplayFor(itemdisplay=>item.Value.DOB)
+                        </td>
+                        <td>
+                            <a onclick="FunEdit(this)" class="btn btn-primary">Edit</a> | <a onclick="FunRemove(this)" class="btn btn-danger">Remove</a> |
+                            <button onclick="FunDetail(this)" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                Detail
+                            </button>
+
+                        </td>
+                    </tr>
+                } 
+            </tbody>
+            </table>
+
+        </div>
+    </div>
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Detail</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <ul>
+                    <li>FirstName: <span id="firstName"></span></li>
+                    <li>LastName:<span id="lastName"></span></li>
+                    <li>Email:<span id="email"></span></li>
+                    <li>Mobile:<span id="mobile"></span></li>
+                    <li>DOB: <span id="dob"></span></li>
+                    <li>Gender: <span id="gender"></span></li>
+                    <li>Skill: <span id="skills"></span></li>
+                    <li>Year: <span id="year"></span></li>
+
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+               
+            </div>
+        </div>
+    </div>
+</div>
+
+@* <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script> *@
+
+    <script type="text/javascript">
+        // var js = jQuery.noConflict(true);
+        // js(document).ready(function () {
+        // // js('#userlist').DataTable({
+
+        // //     });
+        // LoadListing();
+        // });
+    function FunEdit(element)
+    {
+        var id = $(element).closest('tr').find('input[type=hidden]').val();
+        window.location.href = "/user/Edit?id="+id;
+    }
+
+    function FunRemove(element) {
+        var id = $(element).closest('tr').find('input[type=hidden]').val();
+        if (confirm("do you want to remove?")) 
+        { 
+            $.ajax({
+                type: "POST",
+                url: "/User/Remove",
+                data: { id: id },
+                success: function (data) {
+                    if (data == 'pass') {
+                        alert('Removed Successfuly');
+                        window.location.reload();
+                    } else {
+                        alert("Failure due to:" + data)
+                    }
+                },
+                failure: function (err) {
+
+                }
+            });
+        }
+        //window.location.href = "/user/Edit?id=" + id;
+    }
+
+    function FunDetail(element) {
+        var id = $(element).closest('tr').find('input[type=hidden]').val();
+        $.ajax({
+            type: "POST",
+            url: "/User/GetDetail",
+            data: { id: id },
+            success: function (data) {
+                console.log(data)
+                $('#firstName').text(data?.firstName)
+                $('#lastName').text(data?.lastName)
+                $('#email').text(data?.email) 
+                $('#mobile').text(data?.mobile)
+                $('#dob').text(data?.dob)  
+                 $('#skills').text(data?.skills)
+                $('#gender').text(data?.gender)
+                $('#subscribe').text(data?.subscribe)
+                $('#year').text(data?.year)
+            },
+            failure: function (err) {
+
+            }
+        });
+        
+        //window.location.href = "/user/Edit?id=" + id;
+    
+
+    // function LoadListing(){
+    //     var userdata = [];
+    //     $.ajax({
+    //         type: "POST",
+    //         url: "/User/GetAll"
+    //         //async:false,
+    //         success: function (data) {
+    //             console.log(data);
+    //             $.each(data,function(key,value){
+    //                 var editbtn = "<a onclick='FunEdit(this)' class='btn btn - primary'>Edit</a>";
+    //                 var removebtn = "<a onclick='FunRemove(this)' class='btn btn - danger'>Remove</a>";
+    //                 var detailbtn = "<a class='btn btn-primary'>Detail</a>";
+    //                 var hdn = "<input type='hidden' value=" + value.id + "/>";
+    //                 var action = editbtn +"|"+ removebtn +"|"+ detailbtn + hdn;
+    //                 userdata.push([value.id,value.fname,value.lname,value.email,value.mobile,value.createddate,value.dob,action])
+    //             })
+    //         },
+    //         failure: function (err) {
+
+    //         }
+    //     });
+        
+    //     js('#userlist').DataTable({
+    //         data: userdata;
+    //     });
+
+    }
+    </script>
