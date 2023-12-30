@@ -1,0 +1,11 @@
+D:\Anzo\GlobalEntity\bin\Debug\net6.0\GlobalEntity.deps.json
+D:\Anzo\GlobalEntity\bin\Debug\net6.0\GlobalEntity.dll
+D:\Anzo\GlobalEntity\bin\Debug\net6.0\GlobalEntity.pdb
+D:\Anzo\GlobalEntity\obj\Debug\net6.0\GlobalEntity.GeneratedMSBuildEditorConfig.editorconfig
+D:\Anzo\GlobalEntity\obj\Debug\net6.0\GlobalEntity.AssemblyInfoInputs.cache
+D:\Anzo\GlobalEntity\obj\Debug\net6.0\GlobalEntity.AssemblyInfo.cs
+D:\Anzo\GlobalEntity\obj\Debug\net6.0\GlobalEntity.csproj.CoreCompileInputs.cache
+D:\Anzo\GlobalEntity\obj\Debug\net6.0\GlobalEntity.dll
+D:\Anzo\GlobalEntity\obj\Debug\net6.0\refint\GlobalEntity.dll
+D:\Anzo\GlobalEntity\obj\Debug\net6.0\GlobalEntity.pdb
+D:\Anzo\GlobalEntity\obj\Debug\net6.0\ref\GlobalEntity.dll
